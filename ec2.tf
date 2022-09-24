@@ -1,13 +1,23 @@
-resource "aws_instance" "Testing" {
+resource "aws_instance" "Docker_Host" {
   ami                         = "ami-05fa00d4c63e32376"
   availability_zone           = "us-east-1a"
-  instance_type               = "t2.micro"
+  instance_type               = "t2.medium"
   key_name                    = "linuxnew"
   subnet_id                   = "subnet-060372cf8cd26124f"
   vpc_security_group_ids      = ["sg-08faf759e7e05c47f"]
   associate_public_ip_address = true
+  user_data                   = <<-EOF
+    #!/bin/bash
+    sudo yum update -y
+    sudo yum install git -y
+    sudo yum install docker -y
+    sudo usermod -a -G docker ec2-user
+    sudo yum install python3-pip
+    sudo systemctl enable docker.service
+    sudo systemctl start docker.service
+    EOF
   tags = {
-    Name = "Testing"
+    Name = "Docker_Host"
   }
 }
 
