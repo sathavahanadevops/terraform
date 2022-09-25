@@ -118,6 +118,16 @@ resource "aws_instance" "Ansible_tower" {
   subnet_id                   = "subnet-060372cf8cd26124f"
   vpc_security_group_ids      = ["sg-08faf759e7e05c47f"]
   associate_public_ip_address = true
+  user_data                   = <<-EOF
+    #!/bin/bash
+    sudo yum update -y
+    sudo yum install git -y
+    sudo yum install docker -y
+    sudo usermod -a -G docker ec2-user
+    sudo yum install python3-pip
+    sudo systemctl enable docker.service
+    sudo systemctl start docker.service
+    EOF
   tags = {
     Name = "Ansible_tower"
   }
@@ -131,6 +141,16 @@ resource "aws_instance" "k8_management" {
   subnet_id                   = "subnet-060372cf8cd26124f"
   vpc_security_group_ids      = ["sg-08faf759e7e05c47f"]
   associate_public_ip_address = true
+  user_data                   = <<-EOF
+    #!/bin/bash
+    sudo yum update -y
+    sudo yum install git -y
+    sudo yum install docker -y
+    sudo usermod -a -G docker ec2-user
+    sudo yum install python3-pip
+    sudo systemctl enable docker.service
+    sudo systemctl start docker.service
+    EOF
   tags = {
     Name = "k8_management"
   }
